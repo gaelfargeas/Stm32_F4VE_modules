@@ -23,7 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "modules.h"
+#include "hat_AM2320.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,6 +69,8 @@ const osThreadAttr_t Module_main_attributes = {
 };
 /* USER CODE BEGIN PV */
 
+AM2320_HandleTypeDef hAM2320;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -78,8 +81,8 @@ static void MX_SDIO_SD_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_I2C1_Init(void);
-void StartDefaultTask(void *argument);
-void StartTask02(void *argument);
+void Start_Module_A(void *argument);
+void Start_Module_main(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -126,6 +129,7 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
+  hAM2320 = AM2320_driver_init(&hi2c1);
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -149,10 +153,10 @@ int main(void)
 
   /* Create the thread(s) */
   /* creation of Module_A */
-  Module_AHandle = osThreadNew(StartDefaultTask, NULL, &Module_A_attributes);
+  Module_AHandle = osThreadNew(Start_Module_A, NULL, &Module_A_attributes);
 
   /* creation of Module_main */
-  Module_mainHandle = osThreadNew(StartTask02, NULL, &Module_main_attributes);
+  Module_mainHandle = osThreadNew(Start_Module_main, NULL, &Module_main_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -471,40 +475,43 @@ static void MX_FSMC_Init(void)
 
 /* USER CODE END 4 */
 
-/* USER CODE BEGIN Header_StartDefaultTask */
+/* USER CODE BEGIN Header_Start_Module_A */
 /**
   * @brief  Function implementing the Module_A thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
+/* USER CODE END Header_Start_Module_A */
+void Start_Module_A(void *argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
+    AM2320_get_temperature(&hAM2320);
+    osDelay(1);
+    AM2320_get_humidity(&hAM2320);
   }
   /* USER CODE END 5 */
 }
 
-/* USER CODE BEGIN Header_StartTask02 */
+/* USER CODE BEGIN Header_Start_Module_main */
 /**
 * @brief Function implementing the Module_main thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartTask02 */
-void StartTask02(void *argument)
+/* USER CODE END Header_Start_Module_main */
+void Start_Module_main(void *argument)
 {
-  /* USER CODE BEGIN StartTask02 */
+  /* USER CODE BEGIN Start_Module_main */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END StartTask02 */
+  /* USER CODE END Start_Module_main */
 }
 
 /**
