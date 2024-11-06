@@ -71,6 +71,9 @@ void Error_Handler(void);
 #define LCD_BL_GPIO_Port GPIOB
 #define BOOT1_jumper_Pin GPIO_PIN_2
 #define BOOT1_jumper_GPIO_Port GPIOB
+#define BP_SELECT_Pin GPIO_PIN_5
+#define BP_SELECT_GPIO_Port GPIOB
+#define BP_SELECT_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 

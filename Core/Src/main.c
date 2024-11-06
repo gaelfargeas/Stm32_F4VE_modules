@@ -78,7 +78,7 @@ const osThreadAttr_t Module_display_attributes = {
   .priority = (osPriority_t) osPriorityLow,
 };
 /* USER CODE BEGIN PV */
-int module_selected = 0;
+uint8_t module_selected = 0;
 
 #ifdef MODULE_AM2320_ENABLE
 	AM2320_HandleTypeDef hAM2320;
@@ -433,6 +433,16 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : BP_SELECT_Pin */
+  GPIO_InitStruct.Pin = BP_SELECT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(BP_SELECT_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
@@ -491,7 +501,21 @@ static void MX_FSMC_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(GPIO_Pin == GPIO_PIN_5) {
+	if(module_selected < MODULES_NUMBER - 1)
+	{
+		module_selected++;
+	}
+	else
+	{
+		module_selected = 0;
+	}
+  } else {
+      __NOP();
+  }
+}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_Start_Module_AM2320 */
@@ -504,16 +528,16 @@ static void MX_FSMC_Init(void)
 void Start_Module_AM2320(void *argument)
 {
   /* USER CODE BEGIN 5 */
+  #ifdef MODULE_AM2320_ENABLE
   /* Infinite loop */
   for(;;)
   {
-	#ifdef MODULE_AM2320_ENABLE
-		osDelay(1);
-		AM2320_get_temperature(&hAM2320);
-		osDelay(1);
-		AM2320_get_humidity(&hAM2320);
-	#endif
+	osDelay(1);
+	AM2320_get_temperature(&hAM2320);
+	osDelay(1);
+	AM2320_get_humidity(&hAM2320);
   }
+  #endif
   /* USER CODE END 5 */
 }
 
@@ -548,7 +572,6 @@ void Start_Module_display(void *argument)
   /* Infinite loop */
   for(;;)
   {
-
     osDelay(1);
     switch (module_selected) {
     	// module AM2320
