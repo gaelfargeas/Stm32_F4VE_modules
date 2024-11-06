@@ -24,7 +24,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "modules.h"
-#include "hat_AM2320.h"
+
+#ifdef MODULE_AM2320_ENABLE
+	#include "hat_AM2320.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,10 +56,10 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 SRAM_HandleTypeDef hsram1;
 
-/* Definitions for Module_A */
-osThreadId_t Module_AHandle;
-const osThreadAttr_t Module_A_attributes = {
-  .name = "Module_A",
+/* Definitions for Module_AM2320 */
+osThreadId_t Module_AM2320Handle;
+const osThreadAttr_t Module_AM2320_attributes = {
+  .name = "Module_AM2320",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
@@ -67,10 +70,19 @@ const osThreadAttr_t Module_main_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityHigh,
 };
+/* Definitions for Module_display */
+osThreadId_t Module_displayHandle;
+const osThreadAttr_t Module_display_attributes = {
+  .name = "Module_display",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
+int module_selected = 0;
 
-AM2320_HandleTypeDef hAM2320;
-
+#ifdef MODULE_AM2320_ENABLE
+	AM2320_HandleTypeDef hAM2320;
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -81,8 +93,9 @@ static void MX_SDIO_SD_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_I2C1_Init(void);
-void Start_Module_A(void *argument);
+void Start_Module_AM2320(void *argument);
 void Start_Module_main(void *argument);
+void Start_Module_display(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -129,7 +142,10 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
-  hAM2320 = AM2320_driver_init(&hi2c1);
+  #ifdef MODULE_AM2320_ENABLE
+	  // init module AM2320
+	  hAM2320 = AM2320_driver_init(&hi2c1);
+  #endif
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -152,11 +168,14 @@ int main(void)
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of Module_A */
-  Module_AHandle = osThreadNew(Start_Module_A, NULL, &Module_A_attributes);
+  /* creation of Module_AM2320 */
+  Module_AM2320Handle = osThreadNew(Start_Module_AM2320, NULL, &Module_AM2320_attributes);
 
   /* creation of Module_main */
   Module_mainHandle = osThreadNew(Start_Module_main, NULL, &Module_main_attributes);
+
+  /* creation of Module_display */
+  Module_displayHandle = osThreadNew(Start_Module_display, NULL, &Module_display_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -475,23 +494,25 @@ static void MX_FSMC_Init(void)
 
 /* USER CODE END 4 */
 
-/* USER CODE BEGIN Header_Start_Module_A */
+/* USER CODE BEGIN Header_Start_Module_AM2320 */
 /**
-  * @brief  Function implementing the Module_A thread.
+  * @brief  Function implementing the Module_AM2320 thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_Start_Module_A */
-void Start_Module_A(void *argument)
+/* USER CODE END Header_Start_Module_AM2320 */
+void Start_Module_AM2320(void *argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
-    AM2320_get_temperature(&hAM2320);
-    osDelay(1);
-    AM2320_get_humidity(&hAM2320);
+	#ifdef MODULE_AM2320_ENABLE
+		osDelay(1);
+		AM2320_get_temperature(&hAM2320);
+		osDelay(1);
+		AM2320_get_humidity(&hAM2320);
+	#endif
   }
   /* USER CODE END 5 */
 }
@@ -512,6 +533,34 @@ void Start_Module_main(void *argument)
     osDelay(1);
   }
   /* USER CODE END Start_Module_main */
+}
+
+/* USER CODE BEGIN Header_Start_Module_display */
+/**
+* @brief Function implementing the Module_display thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_Module_display */
+void Start_Module_display(void *argument)
+{
+  /* USER CODE BEGIN Start_Module_display */
+  /* Infinite loop */
+  for(;;)
+  {
+
+    osDelay(1);
+    switch (module_selected) {
+    	// module AM2320
+		case 0:
+			//display info module A
+			break;
+		default:
+			break;
+	}
+
+  }
+  /* USER CODE END Start_Module_display */
 }
 
 /**
