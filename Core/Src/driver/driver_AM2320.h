@@ -1,9 +1,13 @@
-/*
- * driver_AM2320.h
- *
- *  Created on: 31 oct. 2024
- *      Author: gael fargeas
- */
+/**
+  ******************************************************************************
+  * @file           : module_loader.c
+  * @brief          : Header for driver_AM2320.c file.
+  ******************************************************************************
+  * history:
+  * ================================================================
+  * 2024-10-31 gael fargeas created
+  *
+  */
 
 #ifndef SRC_DRIVER_DRIVER_AM2320_H_
 #define SRC_DRIVER_DRIVER_AM2320_H_

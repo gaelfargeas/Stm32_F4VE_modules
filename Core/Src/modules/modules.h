@@ -1,10 +1,14 @@
-/*
- * modules.h
- *
- *  Created on: 31 oct. 2024
- *      Author: gael fargeas
- */
-
+/**
+  ******************************************************************************
+  * @file           : module_loader.c
+  * @brief          : Header for modules.c file.
+  *                   This file contains the modules defines.
+  ******************************************************************************
+  * history:
+  * ================================================================
+  * 2024-10-31 gael fargeas created
+  *
+  */
 #ifndef SRC_MODULES_H_
 #define SRC_MODULES_H_
 

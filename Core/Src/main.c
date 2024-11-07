@@ -532,9 +532,9 @@ void Start_Module_AM2320(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	osDelay(1);
+	osDelay(1000);
 	AM2320_get_temperature(&hAM2320);
-	osDelay(1);
+	osDelay(10);
 	AM2320_get_humidity(&hAM2320);
   }
   #endif
@@ -572,7 +572,7 @@ void Start_Module_display(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(100);
     switch (module_selected) {
     	// module AM2320
 		case 0:
