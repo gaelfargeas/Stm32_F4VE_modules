@@ -532,7 +532,7 @@ void Start_Module_AM2320(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	osDelay(1000);
+	osDelay(MODULE_AM2320_TIMER_MS);
 	AM2320_get_temperature(&hAM2320);
 	osDelay(10);
 	AM2320_get_humidity(&hAM2320);
