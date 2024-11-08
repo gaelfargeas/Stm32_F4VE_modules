@@ -13,9 +13,11 @@
 #define SRC_DRIVER_DRIVER_AM2320_H_
 
 #include "stm32f4xx_hal.h"
+#include <string.h>
 
 #define AM2320_READ_REGISTER_CODE 0x03
 #define AM2320_ADRESSE 0xB8
+#define AM2320_TOSTRING_SIZE 33 //strlen("Temperature : XXXX/nHumidity : XX")
 
 typedef struct {
 	I2C_HandleTypeDef* i2c_handle;
@@ -25,6 +27,7 @@ typedef struct {
 	float temperature;
 	float humidity;
 	char info[20];
+	char to_string[AM2320_TOSTRING_SIZE];
 } AM2320_HandleTypeDef;
 
 /* Exported functions prototypes ---------------------------------------------*/
