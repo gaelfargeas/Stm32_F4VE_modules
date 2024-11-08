@@ -14,6 +14,7 @@
 
 #include "stm32f4xx_hal.h"
 #include <string.h>
+#include <stdio.h>
 
 #define AM2320_READ_REGISTER_CODE 0x03
 #define AM2320_ADRESSE 0xB8
