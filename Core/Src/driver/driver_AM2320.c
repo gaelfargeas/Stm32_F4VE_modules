@@ -24,6 +24,7 @@ AM2320_HandleTypeDef AM2320_driver_init(I2C_HandleTypeDef *hi2c)
 	hAM2320.Timeout = HAL_MAX_DELAY;
 	hAM2320.temperature = 0;
 	hAM2320.humidity = 0;
+	sprintf(hAM2320.info, "AM2320 SENSOR");
 
 	return hAM2320;
 }
