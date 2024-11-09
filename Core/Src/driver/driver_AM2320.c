@@ -66,6 +66,17 @@ HAL_StatusTypeDef AM2320_driver_get_data(AM2320_HandleTypeDef *hAM2320, uint8_t 
 }
 
 /**
+* @brief send blanc request to the sensor
+* @param hAM2320: Pointer to a AM2320_HandleTypeDef structure that contains
+*                informations for the specified AM2320.
+* @retval HAL status
+*/
+HAL_StatusTypeDef AM2320_driver_get_blanc_data(AM2320_HandleTypeDef *hAM2320)
+{
+	return AM2320_driver_get_data(hAM2320, 0x00, 0x00);
+}
+
+/**
 * @brief get temperature from AM2320 data
 * @param hAM2320: Pointer to a AM2320_HandleTypeDef structure that contains
 *                informations for the specified AM2320.

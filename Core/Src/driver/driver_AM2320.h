@@ -34,6 +34,7 @@ typedef struct {
 /* Exported functions prototypes ---------------------------------------------*/
 AM2320_HandleTypeDef AM2320_driver_init(I2C_HandleTypeDef *hi2c);
 HAL_StatusTypeDef AM2320_driver_get_data(AM2320_HandleTypeDef  *hAM2320, uint8_t Address_to_read, uint8_t receive_data_size);
+HAL_StatusTypeDef AM2320_driver_get_blanc_data(AM2320_HandleTypeDef *hAM2320);
 HAL_StatusTypeDef AM2320_driver_get_temperature_from_data_raw(AM2320_HandleTypeDef *hAM2320);
 HAL_StatusTypeDef AM2320_driver_get_humidity_from_data_raw(AM2320_HandleTypeDef *hAM2320);
 HAL_StatusTypeDef AM2320_driver_check_CRC_from_data(AM2320_HandleTypeDef *hAM2320);
