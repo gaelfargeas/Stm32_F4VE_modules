@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "modules.h"
+#include "hat_LCD.h"
 
 #ifdef MODULE_AM2320_ENABLE
 	#include "hat_AM2320.h"
@@ -79,6 +80,8 @@ const osThreadAttr_t Module_display_attributes = {
 };
 /* USER CODE BEGIN PV */
 uint8_t module_selected = 0;
+uint8_t module_selected_change = 0;
+Module_info_typedef hModule_info;
 
 #ifdef MODULE_AM2320_ENABLE
 	AM2320_HandleTypeDef hAM2320;
@@ -141,9 +144,9 @@ int main(void)
   MX_FATFS_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
+  hat_LCD_init();
   #ifdef MODULE_AM2320_ENABLE
-	  // init module AM2320
+	  // Init module AM2320
 	  hAM2320 = AM2320_driver_init(&hi2c1);
   #endif
   /* USER CODE END 2 */
@@ -503,6 +506,7 @@ static void MX_FSMC_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+  module_selected_change = 1;
   if(GPIO_Pin == GPIO_PIN_5) {
 	if(module_selected < MODULES_NUMBER - 1)
 	{
@@ -529,14 +533,17 @@ void Start_Module_AM2320(void *argument)
 {
   /* USER CODE BEGIN 5 */
   #ifdef MODULE_AM2320_ENABLE
-  /* Infinite loop */
-  for(;;)
-  {
-	osDelay(MODULE_AM2320_TIMER_MS);
-	AM2320_get_temperature(&hAM2320);
-	osDelay(10);
-	AM2320_get_humidity(&hAM2320);
-  }
+	  // Send blanc request
+	  AM2320_driver_get_blanc_data(&hAM2320);
+
+	  /* Infinite loop */
+	  for(;;)
+	  {
+		osDelay(MODULE_AM2320_TIMER_MS);
+		AM2320_get_temperature(&hAM2320);
+		osDelay(10);
+		AM2320_get_humidity(&hAM2320);
+	  }
   #endif
   /* USER CODE END 5 */
 }
@@ -572,10 +579,19 @@ void Start_Module_display(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(100);
+    osDelay(LCD_REFRESH_RATE);
+
+    if(module_selected_change)
+    {
+    	lcdFillRGB(COLOR_BLACK);
+    	module_selected_change = 0;
+    }
+
     switch (module_selected) {
     	// module AM2320
 		case 0:
+			AM2320_set_module_info(&hAM2320, &hModule_info);
+			hat_LCD_display(&hModule_info, LCD_TEMPLATE_A);
 			//display info module A
 			break;
 		default:
