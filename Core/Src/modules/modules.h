@@ -24,4 +24,14 @@
 #define MODULE_AM2320_ADDRESS 0xB8
 
 
+
+
+
+
+typedef struct
+{
+	char title[20];
+	char text[100];
+} Module_info_typedef;
+
 #endif /* SRC_MODULES_H_ */
