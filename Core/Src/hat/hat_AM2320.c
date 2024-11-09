@@ -49,6 +49,21 @@ HAL_StatusTypeDef AM2320_get_humidity(AM2320_HandleTypeDef *AM2320)
 */
 int AM2320_to_string(AM2320_HandleTypeDef *AM2320)
 {
-	int res = sprintf(AM2320->to_string, "Temperature : %d/nHumidity : %d", (int)(AM2320->temperature /1), (int)(AM2320->humidity/1));
+	int res = sprintf(AM2320->to_string, "Temperature : %d\nHumidity : %d", (int)(AM2320->temperature /1), (int)(AM2320->humidity/1));
 	return res;
 }
+
+/**
+* @brief set generic module info
+* @param hAM2320: Pointer to a AM2320_HandleTypeDef structure that contains
+*                informations for the specified AM2320.
+* @param hmodule_info: Pointer to a Module_info_typedef structure that contains
+*                informations for module.
+* @retval None
+*/
+void AM2320_set_module_info(AM2320_HandleTypeDef *AM2320, Module_info_typedef *hmodule_info)
+{
+	strcpy(hmodule_info->title, AM2320->info);
+	sprintf(hmodule_info->text, "Temperature : %d\nHumidity : %d", (int)(AM2320->temperature /1), (int)(AM2320->humidity/1));
+}
+
