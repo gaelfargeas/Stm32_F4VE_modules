@@ -39,7 +39,7 @@ typedef enum
 #include "LCD_template_A.h"
 #include "LCD_template_B.h"
 
-extern const LCD_template_select LCD_template_selected;
+extern LCD_template_select LCD_template_selected;
 
 void LCD_template_draw_image(GUI_CONST_STORAGE GUI_BITMAP *bmLogo);
 
