@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file           : module_loader.c
-  * @brief          : Header for modules.c file.
-  *                   This file contains the modules defines.
+  * @file           : modules.h
+  * @brief          : Header for hat_AM2320.c file.
+  * 				  This file contains the modules defines.
   ******************************************************************************
   * history:
   * ================================================================
@@ -23,15 +23,19 @@
 #define MODULE_AM2320_TIMER_MS 1000
 #define MODULE_AM2320_ADDRESS 0xB8
 
-
-
-
-
-
 typedef struct
 {
 	char title[20];
 	char text[100];
 } Module_info_typedef;
+
+typedef enum
+{
+  MODULE_DEFAULT 	= 0,
+  MODULE_AM2320		= 1
+} module_list_enum;
+
+module_list_enum active_module[MODULES_NUMBER];
+void module_init(void);
 
 #endif /* SRC_MODULES_H_ */
