@@ -1,10 +1,13 @@
-/*
- * LCD_template.h
- *
- *  Created on: 9 nov. 2024
- *      Author: gael fargeas
- */
-
+/**
+  ******************************************************************************
+  * @file           : LCD_template.c
+  * @brief          : Header for LCD_template.c file.
+  ******************************************************************************
+  * history:
+  * ================================================================
+  * 2024-11-09 gael fargeas created
+  *
+  */
 #ifndef SRC_DRIVER_LCD_LCD_TEMPLATES_LCD_TEMPLATE_H_
 #define SRC_DRIVER_LCD_LCD_TEMPLATES_LCD_TEMPLATE_H_
 
