@@ -83,7 +83,9 @@ uint8_t module_selected = 0;
 uint8_t module_selected_change = 0;
 Module_info_typedef hModule_info;
 
-LCD_template_selected = LCD_TEMPLATE_A;
+LCD_template_select LCD_template_selected;
+module_list_enum active_module[MODULES_NUMBER];
+
 
 #ifdef MODULE_AM2320_ENABLE
 	AM2320_HandleTypeDef hAM2320;
@@ -146,12 +148,17 @@ int main(void)
   MX_FATFS_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+
   module_init();
   hat_LCD_init();
+
+  LCD_template_selected = LCD_TEMPLATE_B;
+
   #ifdef MODULE_AM2320_ENABLE
 	  // Init module AM2320
 	  hAM2320 = AM2320_driver_init(&hi2c1);
   #endif
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
