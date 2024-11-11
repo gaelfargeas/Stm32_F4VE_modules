@@ -23,20 +23,20 @@ void hat_LCD_display(Module_info_typedef *hModule_info, LCD_template_select temp
 	// Display template (background)
 	switch (template_selected) {
 		case LCD_TEMPLATE_A:
-			if(LCD_template_select != LCD_TEMPLATE_A)
+			if(template_displayed != LCD_TEMPLATE_A)
 			{
 				LCD_template_A_display();
-				LCD_template_select = LCD_TEMPLATE_A;
+				template_displayed = LCD_TEMPLATE_A;
 			}
 
 			template_data = &hLCD_template_A;
 
 			break;
 		case LCD_TEMPLATE_B:
-			if(LCD_template_select != LCD_TEMPLATE_B)
+			if(template_displayed != LCD_TEMPLATE_B)
 			{
 				LCD_template_B_display();
-				LCD_template_select = LCD_TEMPLATE_B;
+				template_displayed = LCD_TEMPLATE_B;
 			}
 			template_data = &hLCD_template_B;
 			break;
