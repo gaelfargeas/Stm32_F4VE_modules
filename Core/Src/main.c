@@ -83,6 +83,8 @@ uint8_t module_selected = 0;
 uint8_t module_selected_change = 0;
 Module_info_typedef hModule_info;
 
+LCD_template_selected = LCD_TEMPLATE_A;
+
 #ifdef MODULE_AM2320_ENABLE
 	AM2320_HandleTypeDef hAM2320;
 #endif
@@ -144,6 +146,7 @@ int main(void)
   MX_FATFS_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+  module_init();
   hat_LCD_init();
   #ifdef MODULE_AM2320_ENABLE
 	  // Init module AM2320
@@ -587,12 +590,11 @@ void Start_Module_display(void *argument)
     	module_selected_change = 0;
     }
 
-    switch (module_selected) {
+    switch (active_module[module_selected]) {
     	// module AM2320
-		case 0:
+		case MODULE_AM2320:
 			AM2320_set_module_info(&hAM2320, &hModule_info);
-			hat_LCD_display(&hModule_info, LCD_TEMPLATE_A);
-			//display info module A
+			hat_LCD_display(&hModule_info, LCD_template_selected);
 			break;
 		default:
 			break;

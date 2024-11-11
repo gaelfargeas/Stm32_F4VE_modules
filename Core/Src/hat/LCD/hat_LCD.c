@@ -18,12 +18,27 @@ void hat_LCD_display(Module_info_typedef *hModule_info, LCD_template_select temp
 {
 	// Variables
 	const LCD_template_typedef *template_data;
+	static LCD_template_select template_displayed = LCD_TEMPLATE_DEFAULT;
 
 	// Display template (background)
 	switch (template_selected) {
 		case LCD_TEMPLATE_A:
-			LCD_template_A_display();
+			if(LCD_template_select != LCD_TEMPLATE_A)
+			{
+				LCD_template_A_display();
+				LCD_template_select = LCD_TEMPLATE_A;
+			}
+
 			template_data = &hLCD_template_A;
+
+			break;
+		case LCD_TEMPLATE_B:
+			if(LCD_template_select != LCD_TEMPLATE_B)
+			{
+				LCD_template_B_display();
+				LCD_template_select = LCD_TEMPLATE_B;
+			}
+			template_data = &hLCD_template_B;
 			break;
 		default:
 			break;

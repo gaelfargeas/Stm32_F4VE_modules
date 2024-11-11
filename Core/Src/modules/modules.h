@@ -12,6 +12,7 @@
 #ifndef SRC_MODULES_H_
 #define SRC_MODULES_H_
 
+/* Define -------------------------------------------------------------*/
 #define MODULES_NUMBER 1
 
 /* Module AM2320
@@ -23,6 +24,10 @@
 #define MODULE_AM2320_TIMER_MS 1000
 #define MODULE_AM2320_ADDRESS 0xB8
 
+/* Include -------------------------------------------------------------*/
+#include "stdint.h"
+
+/* typedef -------------------------------------------------------------*/
 typedef struct
 {
 	char title[20];
@@ -35,7 +40,11 @@ typedef enum
   MODULE_AM2320		= 1
 } module_list_enum;
 
+/* Variables -----------------------------------------------------------*/
+
 module_list_enum active_module[MODULES_NUMBER];
+
+/* Function ------------------------------------------------------------*/
 void module_init(void);
 
 #endif /* SRC_MODULES_H_ */

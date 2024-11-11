@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file           : LCD_template.c
+  * @file           : LCD_template.h
   * @brief          : Header for LCD_template.c file.
   ******************************************************************************
   * history:
@@ -13,6 +13,9 @@
 
 #include <stdint.h>
 #include "fonts.h"
+#include "image.h"
+#include "ili9341.h"
+
 
 typedef struct
 {
@@ -26,11 +29,19 @@ typedef struct
 
 typedef enum
 {
-  LCD_TEMPLATE_A	= 0,
-  LCD_TEMPLATE_B    = 1,
-  LCD_TEMPLATE_C    = 2,
-  LCD_TEMPLATE_D  	= 3
+  LCD_TEMPLATE_DEFAULT = 0,
+  LCD_TEMPLATE_A	= 1,
+  LCD_TEMPLATE_B    = 2,
+  LCD_TEMPLATE_C    = 3,
+  LCD_TEMPLATE_D  	= 4
 } LCD_template_select;
 
 #include "LCD_template_A.h"
+#include "LCD_template_B.h"
+
+extern const LCD_template_select LCD_template_selected;
+
+void LCD_template_draw_image(GUI_CONST_STORAGE GUI_BITMAP *bmLogo);
+
+
 #endif /* SRC_DRIVER_LCD_LCD_TEMPLATES_LCD_TEMPLATE_H_ */
