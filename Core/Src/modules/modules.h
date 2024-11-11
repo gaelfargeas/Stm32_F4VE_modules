@@ -42,7 +42,7 @@ typedef enum
 
 /* Variables -----------------------------------------------------------*/
 
-module_list_enum active_module[MODULES_NUMBER];
+extern module_list_enum active_module[MODULES_NUMBER];
 
 /* Function ------------------------------------------------------------*/
 void module_init(void);
