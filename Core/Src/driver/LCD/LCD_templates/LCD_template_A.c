@@ -27,6 +27,12 @@ const LCD_template_typedef hLCD_template_A = {
 */
 void LCD_template_A_display(void)
 {
+	uint16_t x1 = 40;
+	uint16_t y1 = 35;
 
+	uint16_t w = lcdGetWidth() - (x1 * 2);
+	uint16_t h = 5;
+	uint16_t r = 10;
 
+	lcdFillRoundRect(x1, y1, w, h, r, COLOR_CYAN);
 }
