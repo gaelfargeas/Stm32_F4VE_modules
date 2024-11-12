@@ -15,7 +15,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-* Source file: template_A                                            *
+* Source file: template_B                                            *
 * Dimensions:  240 * 240                                             *
 * NumColors:   16bpp: 65536                                          *
 * NumBytes:    115220                                                *
