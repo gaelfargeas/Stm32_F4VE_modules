@@ -1,11 +1,23 @@
-/*
- * hat_LCD.c
- *
- *  Created on: 8 nov. 2024
- *      Author: gael fargeas
- */
+/**
+  ******************************************************************************
+  * @file           : hat_LCD.c
+  * @brief          : LCD Hat functions.
+  ******************************************************************************
+  * history:
+  * ================================================================
+  * 2024-11-08 gael fargeas created
+  *
+  */
+
+/* Includes ---------------------------------------------------------*/
 #include "hat_LCD.h"
 
+/* Functions --------------------------------------------------------*/
+/**
+* @brief LCD initialization
+* @param None
+* @retval None
+*/
 void hat_LCD_init(void)
 {
 	LCD_BL_ON();
@@ -14,6 +26,13 @@ void hat_LCD_init(void)
 	lcdFillRGB(COLOR_BLACK);
 }
 
+/**
+* @brief Display template and information
+* @param hModule_info: Pointer to a Module_info_typedef structure that contains
+*                the information to display for the specified module.
+* @param template_selected: Template selected.
+* @retval None
+*/
 void hat_LCD_display(Module_info_typedef *hModule_info, LCD_template_select template_selected)
 {
 	// Variables

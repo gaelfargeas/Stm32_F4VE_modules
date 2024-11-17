@@ -9,8 +9,15 @@
   *
   */
 
+/* Includes ---------------------------------------------------------*/
 #include "modules.h"
 
+/* Functions --------------------------------------------------------*/
+/**
+* @brief Modules initialization
+* @param None.
+* @retval None
+*/
 void module_init(void)
 {
 	uint8_t index = 0;

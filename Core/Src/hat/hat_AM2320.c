@@ -9,8 +9,10 @@
   *
   */
 
+/* Includes ---------------------------------------------------------*/
 #include "hat_AM2320.h"
 
+/* Functions --------------------------------------------------------*/
 /**
 * @brief Get temperature from the AM2320 sensor
 * @param hAM2320: Pointer to a AM2320_HandleTypeDef structure that contains

@@ -24,10 +24,21 @@
 #define MODULE_AM2320_TIMER_MS 1000
 #define MODULE_AM2320_ADDRESS 0xB8
 
+
+/* Module SMBUS
+ * com : I2C2
+ * SDA	PB11
+ * SCL	PB10
+ */
+#define MODULE_SMBUS_ENABLE
+#define MODULE_SMBUS_TIMER_MS 1000
+#define MODULE_SMBUS_ADDRESS 0xB8
+
+
 /* Include -------------------------------------------------------------*/
 #include "stdint.h"
 
-/* typedef -------------------------------------------------------------*/
+/* Typedef -------------------------------------------------------------*/
 typedef struct
 {
 	char title[20];
@@ -41,7 +52,6 @@ typedef enum
 } module_list_enum;
 
 /* Variables -----------------------------------------------------------*/
-
 extern module_list_enum active_module[MODULES_NUMBER];
 
 /* Function ------------------------------------------------------------*/

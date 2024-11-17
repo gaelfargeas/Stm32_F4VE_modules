@@ -11,12 +11,14 @@
 #ifndef SRC_DRIVER_LCD_LCD_TEMPLATES_LCD_TEMPLATE_H_
 #define SRC_DRIVER_LCD_LCD_TEMPLATES_LCD_TEMPLATE_H_
 
+/* Includes ---------------------------------------------------------*/
 #include <stdint.h>
 #include "fonts.h"
 #include "image.h"
 #include "ili9341.h"
 
 
+/* Typedef ----------------------------------------------------------*/
 typedef struct
 {
   uint16_t 					title_x;
@@ -32,15 +34,18 @@ typedef enum
   LCD_TEMPLATE_DEFAULT = 0,
   LCD_TEMPLATE_A	= 1,
   LCD_TEMPLATE_B    = 2,
-  LCD_TEMPLATE_C    = 3,
-  LCD_TEMPLATE_D  	= 4
+//  LCD_TEMPLATE_C    = 3,
+//  LCD_TEMPLATE_D  	= 4
 } LCD_template_select;
 
+/* Includes ---------------------------------------------------------*/
 #include "LCD_template_A.h"
 #include "LCD_template_B.h"
 
+/* Variables --------------------------------------------------------*/
 extern LCD_template_select LCD_template_selected;
 
+/* Functions prototypes ---------------------------------------------*/
 void LCD_template_draw_image(GUI_CONST_STORAGE GUI_BITMAP *bmLogo);
 
 

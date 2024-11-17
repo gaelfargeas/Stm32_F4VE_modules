@@ -8,6 +8,8 @@
   * 2024-11-09 gael fargeas created
   *
   */
+
+/* Includes ---------------------------------------------------------*/
 #include "LCD_template_B.h"
 
 
@@ -20,6 +22,7 @@ const LCD_template_typedef hLCD_template_B = {
 		.font_text = &Font20,
 };
 
+/* Functions --------------------------------------------------------*/
 /**
 * @brief display the template B
 * @param None.
