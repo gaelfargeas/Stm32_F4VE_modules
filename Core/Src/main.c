@@ -29,6 +29,10 @@
 #ifdef MODULE_AM2320_ENABLE
 	#include "hat_AM2320.h"
 #endif
+
+#ifdef MODULE_SMBUS_ENABLE
+	#include "SMBUS/hat_SMBUS.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +52,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;
 
 SD_HandleTypeDef hsd;
 
@@ -78,6 +83,13 @@ const osThreadAttr_t Module_display_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for Module_SMBUS */
+osThreadId_t Module_SMBUSHandle;
+const osThreadAttr_t Module_SMBUS_attributes = {
+  .name = "Module_SMBUS",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 uint8_t module_selected = 0;
 uint8_t module_selected_change = 0;
@@ -90,6 +102,10 @@ module_list_enum active_module[MODULES_NUMBER];
 #ifdef MODULE_AM2320_ENABLE
 	AM2320_HandleTypeDef hAM2320;
 #endif
+
+#ifdef MODULE_SMBUS_ENABLE
+	module_SMBUS_HandleTypeDef hSMBUS;
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -100,9 +116,11 @@ static void MX_SDIO_SD_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_I2C2_Init(void);
 void Start_Module_AM2320(void *argument);
 void Start_Module_main(void *argument);
 void Start_Module_display(void *argument);
+void Start_Module_SMBUS(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -147,16 +165,22 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   MX_FATFS_Init();
   MX_I2C1_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 
   module_init();
   hat_LCD_init();
 
-  LCD_template_selected = LCD_TEMPLATE_B;
+  LCD_template_selected = LCD_TEMPLATE_A;
 
   #ifdef MODULE_AM2320_ENABLE
 	  // Init module AM2320
-	  hAM2320 = AM2320_driver_init(&hi2c1);
+	  hAM2320 = AM2320_driver_init(&hi2c1, AM2320_ADRESSE);
+  #endif
+
+  #ifdef MODULE_SMBUS_ENABLE
+	  // Init module SMBUS
+	  hSMBUS = hat_SMBUS_init(&hi2c2, MODULE_SMBUS_ADDRESS);
   #endif
 
   /* USER CODE END 2 */
@@ -189,6 +213,9 @@ int main(void)
 
   /* creation of Module_display */
   Module_displayHandle = osThreadNew(Start_Module_display, NULL, &Module_display_attributes);
+
+  /* creation of Module_SMBUS */
+  Module_SMBUSHandle = osThreadNew(Start_Module_SMBUS, NULL, &Module_SMBUS_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -290,6 +317,40 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief I2C2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C2_Init(void)
+{
+
+  /* USER CODE BEGIN I2C2_Init 0 */
+
+  /* USER CODE END I2C2_Init 0 */
+
+  /* USER CODE BEGIN I2C2_Init 1 */
+
+  /* USER CODE END I2C2_Init 1 */
+  hi2c2.Instance = I2C2;
+  hi2c2.Init.ClockSpeed = 100000;
+  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c2.Init.OwnAddress1 = 0;
+  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c2.Init.OwnAddress2 = 0;
+  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C2_Init 2 */
+
+  /* USER CODE END I2C2_Init 2 */
 
 }
 
@@ -609,6 +670,24 @@ void Start_Module_display(void *argument)
 
   }
   /* USER CODE END Start_Module_display */
+}
+
+/* USER CODE BEGIN Header_Start_Module_SMBUS */
+/**
+* @brief Function implementing the Module_SMBUS thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_Module_SMBUS */
+void Start_Module_SMBUS(void *argument)
+{
+  /* USER CODE BEGIN Start_Module_SMBUS */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END Start_Module_SMBUS */
 }
 
 /**
