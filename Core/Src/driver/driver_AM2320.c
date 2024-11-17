@@ -8,19 +8,22 @@
   * 2024-10-31 gael fargeas created
   *
   */
+
+/* Includes ---------------------------------------------------------*/
 #include "driver_AM2320.h"
 
+/* Functions --------------------------------------------------------*/
 /**
 * @brief AM2320 Initialization
 * @param hi2c: Pointer to a I2C_HandleTypeDef structure that contains
 *                the configuration information for the specified I2C.
 * @retval AM2320 Handler TypeDef
 */
-AM2320_HandleTypeDef AM2320_driver_init(I2C_HandleTypeDef *hi2c)
+AM2320_HandleTypeDef AM2320_driver_init(I2C_HandleTypeDef *hi2c, uint8_t AM2320_address)
 {
 	AM2320_HandleTypeDef hAM2320;
-	hAM2320.i2c_handle = hi2c;
-	hAM2320.AM2320_address = AM2320_ADRESSE;
+	hAM2320.i2c_handler = hi2c;
+	hAM2320.AM2320_address = AM2320_address;
 	hAM2320.Timeout = HAL_MAX_DELAY;
 	hAM2320.temperature = 0;
 	hAM2320.humidity = 0;
@@ -43,14 +46,14 @@ HAL_StatusTypeDef AM2320_driver_get_data(AM2320_HandleTypeDef *hAM2320, uint8_t 
 	uint8_t data_send[] = {AM2320_READ_REGISTER_CODE, Address_to_read, receive_data_size};
 
 	// Send read request
-	status = HAL_I2C_Master_Transmit(hAM2320->i2c_handle, hAM2320->AM2320_address, data_send, 3,  hAM2320->Timeout);
+	status = HAL_I2C_Master_Transmit(hAM2320->i2c_handler, hAM2320->AM2320_address, data_send, 3,  hAM2320->Timeout);
 	if(status != HAL_OK)
 	{
 		return status;
 	}
 
 	// Received data
-	status =  HAL_I2C_Master_Receive(hAM2320->i2c_handle, hAM2320->AM2320_address, hAM2320->raw_data, receive_data_size + 4,  hAM2320->Timeout);
+	status =  HAL_I2C_Master_Receive(hAM2320->i2c_handler, hAM2320->AM2320_address, hAM2320->raw_data, receive_data_size + 4,  hAM2320->Timeout);
 	if(status != HAL_OK)
 	{
 		return status;
