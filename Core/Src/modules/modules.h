@@ -34,6 +34,15 @@
 #define MODULE_SMBUS_TIMER_MS 1000
 #define MODULE_SMBUS_ADDRESS 0xB8
 
+/* Module WIRELESS
+ * com : SPI2
+ * MOSI	PB15
+ * MISO	PB14
+ * SCK	PB13
+ * CS	PB12
+ */
+#define MODULE_WIRELESS_ENABLE
+#define MODULE_WIRELESS_TIMER_MS 1000
 
 /* Include -------------------------------------------------------------*/
 #include "stdint.h"
