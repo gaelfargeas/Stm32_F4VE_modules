@@ -33,6 +33,10 @@
 #ifdef MODULE_SMBUS_ENABLE
 	#include "SMBUS/hat_SMBUS.h"
 #endif
+
+#ifdef MODULE_WIRELESS_ENABLE
+	#include "WIRELESS/hat_wireless.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,6 +59,8 @@ I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 
 SD_HandleTypeDef hsd;
+
+SPI_HandleTypeDef hspi2;
 
 UART_HandleTypeDef huart1;
 
@@ -90,6 +96,13 @@ const osThreadAttr_t Module_SMBUS_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for Module_wireless */
+osThreadId_t Module_wirelessHandle;
+const osThreadAttr_t Module_wireless_attributes = {
+  .name = "Module_wireless",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 uint8_t module_selected = 0;
 uint8_t module_selected_change = 0;
@@ -106,6 +119,10 @@ module_list_enum active_module[MODULES_NUMBER];
 #ifdef MODULE_SMBUS_ENABLE
 	module_SMBUS_HandleTypeDef hSMBUS;
 #endif
+
+#ifdef MODULE_WIRELESS_ENABLE
+	module_wireless_HandleTypeDef hwireless;
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -117,10 +134,12 @@ static void MX_USART1_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_I2C2_Init(void);
+static void MX_SPI2_Init(void);
 void Start_Module_AM2320(void *argument);
 void Start_Module_main(void *argument);
 void Start_Module_display(void *argument);
 void Start_Module_SMBUS(void *argument);
+void Start_Module_wireless(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -166,6 +185,7 @@ int main(void)
   MX_FATFS_Init();
   MX_I2C1_Init();
   MX_I2C2_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
   module_init();
@@ -183,6 +203,10 @@ int main(void)
 	  hSMBUS = hat_SMBUS_init(&hi2c2, MODULE_SMBUS_ADDRESS);
   #endif
 
+  #ifdef MODULE_WIRELESS_ENABLE
+	  // Init module SMBUS
+	  hwireless = hat_wireless_init(&hspi2, WIRELESS_NRF24L01, WIRELESS_CS_GPIO_Port, WIRELESS_CS_Pin, 8);
+  #endif
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -216,6 +240,9 @@ int main(void)
 
   /* creation of Module_SMBUS */
   Module_SMBUSHandle = osThreadNew(Start_Module_SMBUS, NULL, &Module_SMBUS_attributes);
+
+  /* creation of Module_wireless */
+  Module_wirelessHandle = osThreadNew(Start_Module_wireless, NULL, &Module_wireless_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -383,6 +410,44 @@ static void MX_SDIO_SD_Init(void)
 }
 
 /**
+  * @brief SPI2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI2_Init(void)
+{
+
+  /* USER CODE BEGIN SPI2_Init 0 */
+
+  /* USER CODE END SPI2_Init 0 */
+
+  /* USER CODE BEGIN SPI2_Init 1 */
+
+  /* USER CODE END SPI2_Init 1 */
+  /* SPI2 parameter configuration*/
+  hspi2.Instance = SPI2;
+  hspi2.Init.Mode = SPI_MODE_MASTER;
+  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi2.Init.NSS = SPI_NSS_SOFT;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi2.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI2_Init 2 */
+
+  /* USER CODE END SPI2_Init 2 */
+
+}
+
+/**
   * @brief USART1 Initialization Function
   * @param None
   * @retval None
@@ -476,7 +541,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, BP1_Pin|LED1_Pin|LED2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LCD_BL_Pin|BOOT1_jumper_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LCD_BL_Pin|BOOT1_jumper_Pin|WIRELESS_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PB3_K1_Pin BP2_K0_Pin */
   GPIO_InitStruct.Pin = PB3_K1_Pin|BP2_K0_Pin;
@@ -492,19 +557,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LCD_BL_Pin BOOT1_jumper_Pin */
-  GPIO_InitStruct.Pin = LCD_BL_Pin|BOOT1_jumper_Pin;
+  /*Configure GPIO pins : LCD_BL_Pin BOOT1_jumper_Pin WIRELESS_CS_Pin */
+  GPIO_InitStruct.Pin = LCD_BL_Pin|BOOT1_jumper_Pin|WIRELESS_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PB13 PB14 PB15 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : BP_SELECT_Pin */
@@ -688,6 +745,27 @@ void Start_Module_SMBUS(void *argument)
     osDelay(1);
   }
   /* USER CODE END Start_Module_SMBUS */
+}
+
+/* USER CODE BEGIN Header_Start_Module_wireless */
+/**
+* @brief Function implementing the Module_wireless thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_Module_wireless */
+void Start_Module_wireless(void *argument)
+{
+  /* USER CODE BEGIN Start_Module_wireless */
+  /* Infinite loop */
+  #ifdef MODULE_WIRELESS_ENABLE
+	  /* Infinite loop */
+	  for(;;)
+	  {
+		osDelay(MODULE_WIRELESS_TIMER_MS);
+	  }
+  #endif
+  /* USER CODE END Start_Module_wireless */
 }
 
 /**
