@@ -13,6 +13,7 @@
 #include "LCD_template_B.h"
 
 
+/* Variables --------------------------------------------------------*/
 const LCD_template_typedef hLCD_template_B = {
 		.title_x = 10,
 		.title_y = 10,
