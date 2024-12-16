@@ -97,7 +97,7 @@ HAL_StatusTypeDef hat_wireless_send_data(module_wireless_HandleTypeDef *hwireles
 	HAL_StatusTypeDef status = HAL_OK;
 	switch (hwirelessmodule->wireless_module_selected) {
 		case WIRELESS_E28_2G4M27S:
-			status = driver_E28_2G4M27S_send_data(hwirelessmodule);
+			status = driver_SX1280_send_data(hwirelessmodule, data, data_size);
 
 			break;
 

@@ -13,8 +13,8 @@
 #define SRC_HAT_WIRELESS_HAT_WIRELESS_H_
 
 /* Includes ---------------------------------------------------------*/
+#include <WIRELESS/driver_SX1280.h>
 #include "stm32f4xx_hal.h"
-#include "WIRELESS/driver_E28_2G4M27S.h"
 #include "WIRELESS/driver_NRF24L01.h"
 #include "WIRELESS/inc_wireless.h"
 
