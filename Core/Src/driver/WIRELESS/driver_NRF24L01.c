@@ -15,8 +15,8 @@
 /* Functions --------------------------------------------------------*/
 /**
 * @brief Set the CS GPIO to high.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_cs_high(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -39,8 +39,8 @@ HAL_StatusTypeDef driver_NRF24L01_cs_high(module_wireless_HandleTypeDef *hwirele
 
 /**
 * @brief Set the CS GPIO to low.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_cs_low(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -65,8 +65,8 @@ HAL_StatusTypeDef driver_NRF24L01_cs_low(module_wireless_HandleTypeDef *hwireles
 
 /**
 * @brief NRF24L01 initialization.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @param template_selected: Template selected.
 * @param mode:				NRF24L01 module mode (RX or TX).
 * @param freq_MHz:			NRF24L01 module signal frequency.
@@ -117,11 +117,11 @@ HAL_StatusTypeDef driver_NRF24L01_init(module_wireless_HandleTypeDef *hwirelessm
 
 /**
 * @brief Write data to a register.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param reg:		Register address to be write.
-* @param value:		Pointer to the data to write.
-* @param data_size:	Size of "value".
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param reg:				Register address to be write.
+* @param value:				Pointer to the data to write.
+* @param data_size:			Size of "value".
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_write_register(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t reg, uint8_t *value, uint8_t value_size)
@@ -135,6 +135,7 @@ HAL_StatusTypeDef driver_NRF24L01_write_register(module_wireless_HandleTypeDef *
 	ret_status = HAL_SPI_TransmitReceive(hwirelessmodule->spi_handler, &command, &status, sizeof(status), hwirelessmodule->timeout);
 	if(ret_status != HAL_OK)
 	{
+		driver_NRF24L01_cs_high(hwirelessmodule);
 		return ret_status;
 	}
 
@@ -152,11 +153,11 @@ HAL_StatusTypeDef driver_NRF24L01_write_register(module_wireless_HandleTypeDef *
 
 /**
 * @brief Read data from a register.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param reg:		Register address to be read.
-* @param data:		Pointer to the data to read.
-* @param data_size:	Size of "data".
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param reg:				Register address to be read.
+* @param data:				Pointer to the data to read.
+* @param data_size:			Size of "data".
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_read_register(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t reg, uint8_t *data, uint8_t data_size)
@@ -170,6 +171,7 @@ HAL_StatusTypeDef driver_NRF24L01_read_register(module_wireless_HandleTypeDef *h
 	ret_status = HAL_SPI_TransmitReceive(hwirelessmodule->spi_handler, &command, &status, sizeof(status), hwirelessmodule->timeout);
 	if(ret_status != HAL_OK)
 	{
+		driver_NRF24L01_cs_high(hwirelessmodule);
 		return ret_status;
 	}
 
@@ -187,8 +189,8 @@ HAL_StatusTypeDef driver_NRF24L01_read_register(module_wireless_HandleTypeDef *h
 
 /**
 * @brief Reset NRF24L01 (set register to default values).
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_reset(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -223,8 +225,8 @@ HAL_StatusTypeDef driver_NRF24L01_reset(module_wireless_HandleTypeDef *hwireless
 
 /**
 * @brief Flush RX fifo register.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_flush_rx_fifo(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -247,8 +249,8 @@ HAL_StatusTypeDef driver_NRF24L01_flush_rx_fifo(module_wireless_HandleTypeDef *h
 
 /**
 * @brief Flush TX fifo register.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_flush_tx_fifo(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -272,8 +274,8 @@ HAL_StatusTypeDef driver_NRF24L01_flush_tx_fifo(module_wireless_HandleTypeDef *h
 
 /**
 * @brief Set the CRC length.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @param crc_lenght:		NRF24L01 module data CRC lenght.
 * @retval HAL status
 */
@@ -316,8 +318,8 @@ HAL_StatusTypeDef driver_NRF24L01_set_crc_length(module_wireless_HandleTypeDef *
 
 /**
 * @brief Power up NRF24L01.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_power_up(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -343,8 +345,8 @@ HAL_StatusTypeDef driver_NRF24L01_power_up(module_wireless_HandleTypeDef *hwirel
 
 /**
 * @brief Power down NRF24L01.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_power_down(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -370,8 +372,8 @@ HAL_StatusTypeDef driver_NRF24L01_power_down(module_wireless_HandleTypeDef *hwir
 
 /**
 * @brief Set NRF24L01 in Rx mode.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_set_prx_mode(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -397,8 +399,8 @@ HAL_StatusTypeDef driver_NRF24L01_set_prx_mode(module_wireless_HandleTypeDef *hw
 
 /**
 * @brief Set NRF24L01 in Tx mode.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_set_ptx_mode(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -424,10 +426,10 @@ HAL_StatusTypeDef driver_NRF24L01_set_ptx_mode(module_wireless_HandleTypeDef *hw
 
 /**
 * @brief Write data in Tx fifo.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param tx_payload:	Pointer to the data to send.
-* @param payload_size:	Size amount of data to be send.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param tx_payload:		Pointer to the data to send.
+* @param payload_size:		Size amount of data to be send.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_write_tx_fifo(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t *tx_payload, uint8_t payload_size)
@@ -437,10 +439,10 @@ HAL_StatusTypeDef driver_NRF24L01_write_tx_fifo(module_wireless_HandleTypeDef *h
 
 /**
 * @brief Read data from Rx fifo
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param rx_payload:	Pointer to the data to read.
-* @param payload_size:	Size amount of data to be received.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param rx_payload:		Pointer to the data to read.
+* @param payload_size:		Size amount of data to be received.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_read_rx_fifo(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t *rx_payload, uint8_t payload_size)
@@ -450,9 +452,9 @@ HAL_StatusTypeDef driver_NRF24L01_read_rx_fifo(module_wireless_HandleTypeDef *hw
 
 /**
 * @brief Get NRF24L01 status.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param data:		Pointer to data buffer.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param data:				Pointer to data buffer.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_get_status(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t *data)
@@ -474,10 +476,10 @@ HAL_StatusTypeDef driver_NRF24L01_set_address_widths(module_wireless_HandleTypeD
 
 /**
 * @brief Set NRF24L01 automatic retransmission.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param count:			NRF24L01 module data automatic retransmission count.
-* @param delay:			NRF24L01 module data automatic retransmission delay.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param count:				NRF24L01 module data automatic retransmission count.
+* @param delay:				NRF24L01 module data automatic retransmission delay.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_auto_retransmit(module_wireless_HandleTypeDef *hwirelessmodule, NRF24L01_RETR_DELAY delay, NRF24L01_RETR_COUNT count)
@@ -488,9 +490,9 @@ HAL_StatusTypeDef driver_NRF24L01_auto_retransmit(module_wireless_HandleTypeDef 
 
 /**
 * @brief Set NRF24L01 automatic retransmission: delay only.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param delay:			NRF24L01 module data automatic retransmission delay.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param delay:				NRF24L01 module data automatic retransmission delay.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_auto_retransmit_delay(module_wireless_HandleTypeDef *hwirelessmodule, NRF24L01_RETR_DELAY delay)
@@ -517,9 +519,9 @@ HAL_StatusTypeDef driver_NRF24L01_auto_retransmit_delay(module_wireless_HandleTy
 
 /**
 * @brief Set NRF24L01 automatic retransmission: count only.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param count:			NRF24L01 module data automatic retransmission count.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param count:				NRF24L01 module data automatic retransmission count.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_auto_retransmit_count(module_wireless_HandleTypeDef *hwirelessmodule, NRF24L01_RETR_COUNT count)
@@ -547,7 +549,7 @@ HAL_StatusTypeDef driver_NRF24L01_auto_retransmit_count(module_wireless_HandleTy
 /**
 * @brief Set NRF24L01 signal frequency.
 * @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+*                			informations for the specified wireless connection.
 * @param freq_MHz:			NRF24L01 module signal frequency.
 * @retval HAL status
 */
@@ -569,8 +571,8 @@ HAL_StatusTypeDef driver_NRF24L01_set_rf_channel(module_wireless_HandleTypeDef *
 
 /**
 * @brief Set NRF24L01 signal data setup.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @param enable:			Enable NRF24L01 module continuous carrier signal.
 * @param data_rate:			NRF24L01 module data rate.
 * @param power:				NRF24L01 module signal power.
@@ -609,8 +611,8 @@ HAL_StatusTypeDef driver_NRF24L01_set_rf_setup(module_wireless_HandleTypeDef *hw
 
 /**
 * @brief Set NRF24L01 signal data setup; continuous carrier signal.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @param enable:			Enable NRF24L01 module continuous carrier signal.
 * @retval HAL status
 */
@@ -638,10 +640,9 @@ HAL_StatusTypeDef driver_NRF24L01_set_rf_setup_continuous_carrier (module_wirele
 
 /**
 * @brief Set NRF24L01 signal data setup: data rate.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection..
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection..
 * @param data_rate:			NRF24L01 module data rate.
-*
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_set_rf_setup_air_data_rate(module_wireless_HandleTypeDef *hwirelessmodule, NRF24L01_RF_SETUP_DATA_RATE data_rate)
@@ -683,8 +684,8 @@ HAL_StatusTypeDef driver_NRF24L01_set_rf_setup_air_data_rate(module_wireless_Han
 
 /**
 * @brief Set NRF24L01 signal data setup: output power.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @param power:				NRF24L01 module signal power.
 * @retval HAL status
 */
@@ -712,8 +713,8 @@ HAL_StatusTypeDef driver_NRF24L01_set_rf_setup_tx_output_power(module_wireless_H
 
 /**
 * @brief Clear maximum number of TX retransmits interrupt.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_clear_max_rt(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -740,8 +741,8 @@ HAL_StatusTypeDef driver_NRF24L01_clear_max_rt(module_wireless_HandleTypeDef *hw
 
 /**
 * @brief Clear data Sent TX FIFO interrupt.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_clear_tx_ds(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -767,8 +768,8 @@ HAL_StatusTypeDef driver_NRF24L01_clear_tx_ds(module_wireless_HandleTypeDef *hwi
 
 /**
 * @brief clear Data Ready RX FIFO interrupt.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_clear_rx_dr(module_wireless_HandleTypeDef *hwirelessmodule)
@@ -794,9 +795,9 @@ HAL_StatusTypeDef driver_NRF24L01_clear_rx_dr(module_wireless_HandleTypeDef *hwi
 
 /**
 * @brief Set Rx payload width for data pipe 0.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param bytes:				 data pipe 0 payload width.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param bytes:				Data pipe 0 payload width.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_0_widths(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t bytes)
@@ -806,9 +807,9 @@ HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_0_widths(module_wireless_Handle
 
 /**
 * @brief Set Rx payload width for data pipe 1.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param bytes:				 data pipe 1 payload width.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param bytes:				Data pipe 1 payload width.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_1_widths(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t bytes)
@@ -818,9 +819,9 @@ HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_1_widths(module_wireless_Handle
 
 /**
 * @brief Set Rx payload width for data pipe 2.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param bytes:				 data pipe 2 payload width.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param bytes:				Data pipe 2 payload width.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_2_widths(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t bytes)
@@ -830,9 +831,9 @@ HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_2_widths(module_wireless_Handle
 
 /**
 * @brief Rx payload width for data pipe 3.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param bytes:				 data pipe 3 payload width.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param bytes:				Data pipe 3 payload width.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_3_widths(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t bytes)
@@ -842,9 +843,9 @@ HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_3_widths(module_wireless_Handle
 
 /**
 * @brief Rx payload width for data pipe 4.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param bytes:				 data pipe 4 payload width.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param bytes:				Data pipe 4 payload width.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_4_widths(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t bytes)
@@ -854,9 +855,9 @@ HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_4_widths(module_wireless_Handle
 
 /**
 * @brief Rx payload width for data pipe 5.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param bytes:				 data pipe 5 payload width.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param bytes:				Data pipe 5 payload width.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_5_widths(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t bytes)
@@ -866,8 +867,8 @@ HAL_StatusTypeDef driver_NRF24L01_rx_set_payload_5_widths(module_wireless_Handle
 
 /**
 * @brief Get NRF24L01 fifo status.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
 * @param status:			Pointer to data buffer.
 * @retval HAL status
 */
@@ -878,10 +879,10 @@ HAL_StatusTypeDef driver_NRF24L01_get_fifo_status(module_wireless_HandleTypeDef 
 
 /**
 * @brief send data.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param data:			pointer to data buffer.
-* @param data_size:		Size amount of data to be send.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param data:				Pointer to data buffer.
+* @param data_size:			Size amount of data to be send.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_send_data(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t *data, uint8_t data_size)
@@ -891,10 +892,10 @@ HAL_StatusTypeDef driver_NRF24L01_send_data(module_wireless_HandleTypeDef *hwire
 
 /**
 * @brief receive data.
-* @param hwirelessmodule: Pointer to a wireless_module_HandleTypeDef structure that contains
-*                	informations for the specified wireless connection.
-* @param data:	 		pointer to data buffer.
-* @param data_size:		Size amount of data to be received.
+* @param hwirelessmodule: 	Pointer to a wireless_module_HandleTypeDef structure that contains
+*                			informations for the specified wireless connection.
+* @param data:	 			Pointer to data buffer.
+* @param data_size:			Size amount of data to be received.
 * @retval HAL status
 */
 HAL_StatusTypeDef driver_NRF24L01_receice_data(module_wireless_HandleTypeDef *hwirelessmodule, uint8_t *data, uint8_t data_size)
